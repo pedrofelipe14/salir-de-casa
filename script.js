@@ -46,7 +46,7 @@
 
   const flash = $("flash");
   document.addEventListener("pointerdown", (e) => {
-    if (reduceMotion || e.target.closest("button, a, video, iframe, .player, .lightbox, .player-barra")) return;
+    if (reduceMotion || e.target.closest("button, a, video, iframe, .player, .lightbox, .player-barra, .piano-wrap")) return;
     flash.style.setProperty("--fx", e.clientX + "px");
     flash.style.setProperty("--fy", e.clientY + "px");
     flash.classList.remove("on");
@@ -257,16 +257,29 @@
     hero.appendChild(titulo);
     root.appendChild(hero);
 
+    // Every note you play kicks the title's glitch.
+    let glitchTimer = 0;
+    const glitch = (ms) => {
+      if (reduceMotion) return;
+      titulo.classList.add("glitch");
+      clearTimeout(glitchTimer);
+      glitchTimer = setTimeout(() => titulo.classList.remove("glitch"), ms);
+    };
+    const desmontarPiano = window.SDCPiano.montar(hero, { onNote: () => glitch(70 + Math.random() * 60) });
+
     if (!reduceMotion) {
       const flicker = () => {
-        titulo.classList.add("glitch");
-        later(() => titulo.classList.remove("glitch"), 90 + Math.random() * 120);
+        glitch(90 + Math.random() * 120);
         later(flicker, 2200 + Math.random() * 4000);
       };
       later(flicker, 1600);
     }
 
-    return () => timers.forEach(clearTimeout);
+    return () => {
+      timers.forEach(clearTimeout);
+      clearTimeout(glitchTimer);
+      desmontarPiano();
+    };
   };
 
   // ---------- section pages: temas, diario, archivo ----------

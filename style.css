@@ -112,7 +112,7 @@ body.inicio .pie { display: none; }
   margin: 0;
   text-align: center;
   font-weight: 900;
-  font-size: clamp(60px, 15vw, 250px);
+  font-size: clamp(52px, 12vw, 190px);
   line-height: 0.8;
   letter-spacing: -0.055em;
   text-transform: lowercase;
@@ -418,4 +418,85 @@ body.con-player { padding-bottom: 76px; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+/* ---------- the cover's piano: keys drawn in chalk on the board ---------- */
+.piano-wrap { width: min(940px, 94vw); }
+.piano {
+  position: relative;
+  display: flex;
+  height: clamp(120px, 20vw, 190px);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+.tecla { position: relative; }
+.tecla.blanca {
+  flex: 1;
+  margin-left: -2px;
+  border: 2px solid rgba(241, 239, 233, 0.85);
+  border-top-width: 3px;
+  border-radius: 0 0 7px 7px;
+  background: rgba(241, 239, 233, 0.06);
+  transition: background 0.06s, transform 0.06s;
+}
+.tecla.blanca:first-child { margin-left: 0; }
+.tecla.negra {
+  position: absolute;
+  top: 0;
+  height: 60%;
+  z-index: 2;
+  border: 2px solid rgba(241, 239, 233, 0.85);
+  border-top-width: 3px;
+  border-radius: 0 0 5px 5px;
+  background: #0b2c15;
+  transition: background 0.06s;
+}
+.tecla.blanca:hover { background: rgba(241, 239, 233, 0.14); }
+.tecla.negra:hover { background: #134222; }
+.tecla.on { transform: translateY(2px); }
+.tecla.blanca.on { background: var(--blanco); }
+.tecla.negra.on { background: var(--tiza); }
+/* The game playing its melody back to you. */
+.tecla.guia { background: var(--tiza) !important; box-shadow: 0 0 22px rgba(159, 224, 169, 0.6); }
+
+.tecla-letra,
+.tecla-nombre {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  pointer-events: none;
+}
+.tecla-letra { bottom: 8px; color: rgba(241, 239, 233, 0.55); }
+.tecla.negra .tecla-letra { bottom: 6px; }
+.tecla.on .tecla-letra { color: var(--pizarron); }
+.tecla-nombre { top: 8px; color: rgba(241, 239, 233, 0.35); }
+
+.piano.escuchando { cursor: wait; }
+.piano.error { animation: trabado 0.35s steps(2) 1; }
+@keyframes trabado {
+  0%   { transform: translateX(-6px); filter: hue-rotate(160deg) saturate(3); }
+  50%  { transform: translateX(5px); }
+  100% { transform: none; filter: none; }
+}
+
+.piano-pie {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  color: rgba(241, 239, 233, 0.6);
+}
+.piano-octava { color: var(--blanco); }
+.piano-jugar { margin-left: auto; }
+.piano-estado { min-width: 10ch; color: var(--tiza); }
+
+/* Touch screens have no keyboard: hide the letters and the hint. */
+@media (hover: none) {
+  .tecla-letra, .piano-ayuda { display: none; }
 }
