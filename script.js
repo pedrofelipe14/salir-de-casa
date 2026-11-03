@@ -590,6 +590,7 @@
       pageCleanups = [];
       vista.replaceChildren();
       document.title = "salir de casa";
+      document.body.classList.toggle("interna", !enInicio); // shows the fixed "← inicio"
 
       const tema = hash.match(/^\/tema\/([^/]+)/);
       if (enInicio) cleanupVista = vistaInicio(vista);

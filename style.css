@@ -76,6 +76,12 @@ img { display: block; max-width: 100%; height: auto; }
   font-size: 13px;
 }
 .barra-nombre { font-weight: 800; letter-spacing: -0.02em; }
+.barra-volver { display: none; font-family: var(--mono); font-size: 12px; border: 1px solid var(--blanco); padding: 4px 10px; white-space: nowrap; }
+.barra-volver:hover { background: var(--blanco); color: var(--negro); }
+body.interna .barra-nombre { display: none; }
+body.interna .barra-volver { display: inline-block; }
+/* Inner pages scroll text under the bar, so it gets a solid backing instead of blending. */
+body.interna .barra { mix-blend-mode: normal; background: linear-gradient(var(--negro) 72%, rgba(6, 6, 6, 0)); padding-bottom: 22px; }
 .barra-nav { display: flex; gap: 18px; margin-left: auto; }
 .barra-nav a { color: var(--blanco); opacity: 0.75; }
 .barra-nav a:hover { opacity: 1; text-decoration: line-through; }
@@ -404,6 +410,7 @@ body.con-player { padding-bottom: 76px; }
   .barra { gap: 12px; padding: 12px 16px; }
   .barra-nombre, .barra-hora { display: none; }
   .barra-nav { margin: 0 auto; gap: 16px; }
+  body.interna .barra-nav { margin: 0 0 0 auto; gap: 12px; font-size: 12px; }
   .titulo { bottom: 14vh; }
   .bloque { padding: 90px 16px 30px; }
   .track-head { grid-template-columns: 36px minmax(0, 1fr); }
