@@ -8,94 +8,72 @@
   <link rel="icon" href="assets/banner.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@400;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="scanlines" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
 
-  <div class="cinta" aria-hidden="true"><div class="cinta-track" id="cinta"></div></div>
+  <nav class="nav">
+    <a href="#demos">demos</a>
+    <a href="#diario">diario</a>
+    <a href="#tablero">fotos + ideas</a>
+    <a href="#instrumento">el instrumento</a>
+  </nav>
 
-  <header class="top">
-    <img class="banner" src="assets/banner.png" alt="salir de casa: letras de puntos y una casita dibujada en tiza">
-    <h1 class="glitch" data-text="salir de casa">salir de casa</h1>
-    <p class="sub">indietronica <span class="sep">//</span> micro tech <span class="sep">//</span> disco en proceso</p>
+  <header class="hero">
+    <div class="hero-text">
+      <p class="mono kicker">indietronica · micro tech · disco en proceso</p>
+      <h1 class="titulo">salir de casa</h1>
+      <p class="mano nota-hero">un disco que todavía no tiene nombre <span aria-hidden="true">&#8600;</span></p>
+      <div class="progreso">
+        <div class="progreso-linea"><span id="progreso-fill"></span></div>
+        <p class="mono"><span id="progreso"></span>% &nbsp;/&nbsp; <span id="estado"></span></p>
+      </div>
+    </div>
+
+    <figure class="polaroid logo-pin">
+      <span class="cinta-papel" aria-hidden="true"></span>
+      <img src="assets/banner.png" alt="Logo de salir de casa: las letras sdc hechas de puntos y una casita dibujada en tiza sobre pizarrón verde">
+      <figcaption class="mano">la casa, en tiza</figcaption>
+    </figure>
   </header>
 
-  <div class="layout">
-    <aside class="side">
-      <section class="win">
-        <div class="win-bar"><span>~/navegar</span><i></i></div>
-        <nav class="win-body nav">
-          <a href="#diario">&gt; diario</a>
-          <a href="#demos">&gt; demos</a>
-          <a href="#arte">&gt; arte + fotos</a>
-          <a href="#ideas">&gt; ideas</a>
-          <a href="#plugin">&gt; el plugin</a>
-        </nav>
-      </section>
+  <main>
+    <section class="seccion" id="demos">
+      <h2 class="seccion-titulo">demos <em>y versiones</em></h2>
+      <p class="mano seccion-nota">de la primera idea a la versión final, todo queda acá</p>
+      <div class="cassettes" id="demos-list"></div>
+    </section>
 
-      <section class="win">
-        <div class="win-bar"><span>estado.exe</span><i></i></div>
-        <div class="win-body">
-          <p class="label">disco #1</p>
-          <p class="big">sin nombre</p>
-          <div class="barra" role="progressbar" aria-label="progreso del disco" id="barra"><div class="barra-fill" id="barra-fill"></div></div>
-          <p class="small"><span id="progreso"></span>% &mdash; <span id="estado"></span></p>
-        </div>
-      </section>
+    <section class="seccion" id="diario">
+      <h2 class="seccion-titulo">diario <em>del disco</em></h2>
+      <div class="cuaderno" id="diario-list"></div>
+    </section>
 
-      <section class="win">
-        <div class="win-bar"><span>sonando_ahora</span><i></i></div>
-        <div class="win-body">
-          <div class="eq" aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
-          <p class="small">ruido de la casa a las 3am</p>
-        </div>
-      </section>
-    </aside>
+    <section class="seccion" id="tablero">
+      <h2 class="seccion-titulo">fotos, arte <em>e ideas sueltas</em></h2>
+      <div class="tablero" id="tablero-list"></div>
+    </section>
 
-    <main class="main">
-      <section class="win" id="diario">
-        <div class="win-bar"><span>diario.txt</span><i></i></div>
-        <div class="win-body" id="diario-list"></div>
-      </section>
+    <section class="seccion instrumento" id="instrumento">
+      <figure class="polaroid ancha">
+        <span class="cinta-papel" aria-hidden="true"></span>
+        <img src="assets/plugin.png" alt="Captura del plugin Salir de Casa: perillas sobre un fondo verde pizarrón">
+        <figcaption class="mano">el instrumento</figcaption>
+      </figure>
+      <div class="instrumento-texto">
+        <h2 class="seccion-titulo">hecho <em>con su propio sinte</em></h2>
+        <p>El disco se está grabando con un instrumento hecho para él: <strong>Salir de Casa</strong>, un sintetizador con ondas que se dibujan moviendo puntos, un LFO y micro-loops que traban el sonido como un recuerdo que se repite.</p>
+        <p class="mano">cuando salga el disco, sale el plugin</p>
+        <p class="mono pequeño">vst3 · windows · en desarrollo</p>
+      </div>
+    </section>
+  </main>
 
-      <section class="win" id="demos">
-        <div class="win-bar"><span>demos/</span><i></i></div>
-        <div class="win-body" id="demos-list"></div>
-      </section>
-
-      <section class="win" id="arte">
-        <div class="win-bar"><span>arte_y_fotos/</span><i></i></div>
-        <div class="win-body grid" id="arte-list"></div>
-      </section>
-
-      <section class="win" id="ideas">
-        <div class="win-bar"><span>ideas_sueltas</span><i></i></div>
-        <div class="win-body notas" id="ideas-list"></div>
-      </section>
-
-      <section class="win" id="plugin">
-        <div class="win-bar"><span>salir_de_casa.vst3</span><i></i></div>
-        <div class="win-body">
-          <p>El disco se está haciendo con un instrumento propio: <strong>Salir de Casa</strong>, un sintetizador con ondas que se dibujan con puntos, LFO y micro-loops que traban el sonido como un recuerdo que se repite. Cuando salga el disco, sale el plugin.</p>
-          <figure class="shot">
-            <img src="assets/plugin.png" alt="Captura del plugin Salir de Casa: perillas verdes sobre fondo de pizarrón">
-          </figure>
-          <p class="small">estado: en desarrollo &mdash; VST3 para windows</p>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <footer class="foot">
-    <div class="badges">
-      <span class="badge">hecho en casa</span>
-      <span class="badge alt">micro tech</span>
-      <span class="badge">usá auriculares</span>
-      <span class="badge alt">glitch ok</span>
-    </div>
-    <p class="small">salir de casa &copy; <span id="anio"></span> &mdash; esta página se actualiza a medida que el disco crece</p>
+  <footer class="pie">
+    <p class="mano">gracias por pasar</p>
+    <p class="mono pequeño">salir de casa &copy; <span id="anio"></span> — esta página crece junto con el disco</p>
   </footer>
 
   <script src="data.js"></script>
