@@ -246,13 +246,6 @@
     return h;
   };
 
-  const bloqueTitulo = (num, text) => {
-    const h = el("h2", "bloque-titulo");
-    h.appendChild(el("span", "num", num));
-    h.appendChild(document.createTextNode(text));
-    return h;
-  };
-
   // ---------- page: inicio ----------
   const vistaInicio = (root) => {
     const timers = [];
@@ -266,16 +259,12 @@
     const titulo = el("h1", "titulo", "salir de casa");
     titulo.dataset.text = "salir de casa";
     hero.appendChild(titulo);
-    const heroPie = el("div", "hero-pie mono");
-    heroPie.appendChild(el("span", "", "disco #1 — sin nombre"));
-    heroPie.appendChild(el("span", "", data.progreso + "% — " + data.estado));
-    hero.appendChild(heroPie);
     root.appendChild(hero);
 
     // Logo drawn to a canvas so it can tear like a bad signal.
     const ctx = canvas.getContext("2d");
     const logo = new Image();
-    logo.src = "assets/banner.png";
+    logo.src = "assets/logo-tiza.png"; // just the chalk, so it sits right on the page's green
     const drawClean = () => {
       ctx.globalCompositeOperation = "source-over";
       ctx.globalAlpha = 1;
@@ -329,12 +318,28 @@
       later(flicker, 1600);
     }
 
-    const main = el("main");
+    return () => timers.forEach(clearTimeout);
+  };
 
-    // Temas: each row opens the song; versions play right here too.
-    const demos = el("section", "bloque");
-    demos.id = "demos";
-    demos.appendChild(bloqueTitulo("01", "temas"));
+  // ---------- section pages: temas, diario, archivo ----------
+  // A page header shared by every inner page: big glitchable title over a small label.
+  const paginaHead = (label, text, extra) => {
+    const head = el("header", "pagina-head");
+    head.appendChild(el("span", "num", label));
+    const h1 = el("h1", "pagina-titulo", text);
+    h1.dataset.text = text;
+    head.appendChild(h1);
+    if (extra) head.appendChild(extra);
+    return head;
+  };
+
+  const vistaTemas = (root) => {
+    document.title = "temas — salir de casa";
+    const page = el("article", "pagina");
+    page.appendChild(paginaHead("01", "temas",
+      el("p", "mono", "disco #1 — sin nombre · " + data.progreso + "% — " + data.estado)));
+
+    // Each row opens the song; versions play right here too.
     const lista = el("ol", "tracks");
     data.temas.forEach((tema, i) => {
       const li = el("li", "track");
@@ -354,12 +359,14 @@
       }
       lista.appendChild(li);
     });
-    demos.appendChild(lista);
-    main.appendChild(demos);
+    page.appendChild(lista);
+    root.appendChild(page);
+  };
 
-    const diario = el("section", "bloque");
-    diario.id = "diario";
-    diario.appendChild(bloqueTitulo("02", "diario"));
+  const vistaDiario = (root) => {
+    document.title = "diario — salir de casa";
+    const page = el("article", "pagina");
+    page.appendChild(paginaHead("02", "diario"));
     const entradas = el("div", "diario");
     for (const entrada of data.diario) {
       const item = el("article", "entrada");
@@ -370,40 +377,22 @@
       item.appendChild(cuerpo);
       entradas.appendChild(item);
     }
-    diario.appendChild(entradas);
-    main.appendChild(diario);
+    page.appendChild(entradas);
+    root.appendChild(page);
+  };
 
-    const archivo = el("section", "bloque");
-    archivo.id = "archivo";
-    archivo.appendChild(bloqueTitulo("03", "archivo"));
-    archivo.appendChild(el("p", "mono bloque-nota", "fotos, arte, bocetos, ideas sueltas. se va llenando."));
+  const vistaArchivo = (root) => {
+    document.title = "archivo — salir de casa";
+    const page = el("article", "pagina");
+    page.appendChild(paginaHead("03", "archivo", el("p", "mono", "fotos, arte, bocetos, ideas sueltas. se va llenando.")));
     const grid = galeria(data.arte, true);
     (data.ideas || []).forEach((idea, i) => {
       const wrap = el("div", "pieza");
       wrap.appendChild(el("p", "nota-marcador", idea));
       grid.insertBefore(wrap, grid.children[Math.min(grid.children.length, 1 + i * 2)] || null);
     });
-    archivo.appendChild(grid);
-    main.appendChild(archivo);
-
-    const inst = el("section", "bloque");
-    inst.id = "instrumento";
-    inst.appendChild(bloqueTitulo("04", "instrumento"));
-    const teaser = el("a", "captura teaser");
-    teaser.href = "#/instrumento";
-    const img = el("img");
-    img.src = data.instrumento.capturas[0] ? data.instrumento.capturas[0].imagen : "assets/plugin.png";
-    img.alt = "Captura del plugin Salir de Casa";
-    teaser.appendChild(img);
-    const cap = el("span", "mono teaser-pie");
-    cap.appendChild(el("span", "", data.instrumento.archivo + " — " + data.instrumento.estado));
-    cap.appendChild(el("span", "teaser-entrar", "entrar →"));
-    teaser.appendChild(cap);
-    inst.appendChild(teaser);
-    main.appendChild(inst);
-
-    root.appendChild(main);
-    return () => timers.forEach(clearTimeout);
+    page.appendChild(grid);
+    root.appendChild(page);
   };
 
   // ---------- page: one song ----------
@@ -415,7 +404,7 @@
 
     const page = el("article", "pagina");
     const volver = el("a", "volver mono", "← temas");
-    volver.href = "#demos";
+    volver.href = "#/temas";
     page.appendChild(volver);
 
     const head = el("header", "pagina-head");
@@ -578,31 +567,41 @@
   let cleanupVista = null;
   let rutaActual = null;
 
+  const secciones = {
+    "/temas": vistaTemas,
+    "/diario": vistaDiario,
+    "/archivo": vistaArchivo,
+    "/instrumento": vistaInstrumento,
+  };
+  // Old links from when everything lived on the home page.
+  const viejos = { demos: "/temas", diario: "/diario", archivo: "/archivo", instrumento: "/instrumento" };
+
   const route = () => {
-    const hash = location.hash.replace(/^#/, "");
-    const enInicio = !hash.startsWith("/");
+    let hash = location.hash.replace(/^#/, "");
+    if (viejos[hash]) hash = viejos[hash];
+    const enInicio = hash === "" || hash === "/";
     const ruta = enInicio ? "inicio" : hash;
+    if (ruta === rutaActual) return;
 
-    // Anchors inside inicio (#demos, #diario...) just scroll if we're already there.
-    if (ruta !== rutaActual) {
-      if (cleanupVista) cleanupVista();
-      pageCleanups.forEach((fn) => fn());
-      pageCleanups = [];
-      vista.replaceChildren();
-      document.title = "salir de casa";
-      document.body.classList.toggle("interna", !enInicio); // shows the fixed "← inicio"
+    if (cleanupVista) cleanupVista();
+    pageCleanups.forEach((fn) => fn());
+    pageCleanups = [];
+    vista.replaceChildren();
+    document.title = "salir de casa";
+    document.body.classList.toggle("inicio", enInicio);  // the green cover
+    document.body.classList.toggle("interna", !enInicio); // shows the fixed "← inicio"
+    document.querySelectorAll(".barra-nav a").forEach((a) => {
+      a.classList.toggle("activo", a.getAttribute("href") === "#" + hash);
+    });
 
-      const tema = hash.match(/^\/tema\/([^/]+)/);
-      if (enInicio) cleanupVista = vistaInicio(vista);
-      else if (tema) cleanupVista = vistaTema(vista, decodeURIComponent(tema[1]));
-      else if (hash === "/instrumento") cleanupVista = vistaInstrumento(vista);
-      else cleanupVista = vistaNoEncontrado(vista);
-      rutaActual = ruta;
-    }
+    const tema = hash.match(/^\/tema\/([^/]+)/);
+    if (enInicio) cleanupVista = vistaInicio(vista);
+    else if (tema) cleanupVista = vistaTema(vista, decodeURIComponent(tema[1]));
+    else if (secciones[hash]) cleanupVista = secciones[hash](vista);
+    else cleanupVista = vistaNoEncontrado(vista);
+    rutaActual = ruta;
 
-    const destino = enInicio && hash ? document.getElementById(hash) : null;
-    if (destino) destino.scrollIntoView();
-    else window.scrollTo({ top: 0, behavior: "instant" });
+    window.scrollTo({ top: 0, behavior: "instant" });
   };
 
   window.addEventListener("hashchange", route);

@@ -6,6 +6,7 @@
   --gris-oscuro: #2a2a2a;
   --tiza: #9fe0a9;      /* the only colour: chalk green from the logo */
   --rojo: #ff2a2a;      /* used once or twice, like a camera's rec light */
+  --pizarron: #124c24;  /* the board behind the logo, sampled from banner.png */
 
   --sans: "Inter Tight", Arial, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, monospace;
@@ -85,44 +86,44 @@ body.interna .barra { mix-blend-mode: normal; background: linear-gradient(var(--
 .barra-nav { display: flex; gap: 18px; margin-left: auto; }
 .barra-nav a { color: var(--blanco); opacity: 0.75; }
 .barra-nav a:hover { opacity: 1; text-decoration: line-through; }
+.barra-nav a.activo { opacity: 1; text-decoration: line-through; }
 .barra-hora { color: var(--blanco); }
 .barra-hora::before { content: "\25CF  "; color: var(--rojo); animation: rec 1.2s steps(1) infinite; }
 @keyframes rec { 50% { opacity: 0; } }
 
-/* ---------- hero ---------- */
+/* ---------- inicio: just the logo and the name on the chalkboard green ---------- */
+body.inicio { background: var(--pizarron); }
+body.inicio .barra { mix-blend-mode: normal; }
+body.inicio .pie { display: none; }
+
 .hero {
   min-height: 100vh;
   min-height: 100svh;
-  position: relative;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 6vh, 64px);
   padding: 80px 20px 60px;
   overflow: hidden;
-  /* A pool of light in the dark, like a porch light. */
-  background: radial-gradient(ellipse 60% 45% at 50% 42%, rgba(159, 224, 169, 0.10), transparent 70%);
 }
 .logo {
   width: min(880px, 92vw);
   height: auto;
   aspect-ratio: 1018 / 309;
-  filter: contrast(1.15) brightness(1.05);
 }
 .titulo {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 9vh;
+  position: relative;
   margin: 0;
   text-align: center;
   font-weight: 900;
-  font-size: clamp(56px, 15vw, 240px);
+  font-size: clamp(52px, 13vw, 210px);
   line-height: 0.8;
   letter-spacing: -0.055em;
   text-transform: lowercase;
   color: var(--blanco);
   transform: scaleY(1.35);
-  transform-origin: bottom;
-  mix-blend-mode: difference;
+  transform-origin: center;
   white-space: nowrap;
   pointer-events: none;
 }
@@ -138,16 +139,6 @@ body.interna .barra { mix-blend-mode: normal; background: linear-gradient(var(--
 .titulo.glitch::after  { opacity: 1; clip-path: inset(62% 0 12% 0); transform: translateX(3%); }
 .titulo.glitch { color: transparent; -webkit-text-stroke: 1px var(--blanco); }
 
-.hero-pie {
-  position: absolute;
-  left: 20px;
-  right: 20px;
-  bottom: 18px;
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-}
 
 /* ---------- blocks ---------- */
 .bloque { padding: 110px 20px 40px; max-width: 1200px; margin: 0 auto; }
@@ -411,7 +402,6 @@ body.con-player { padding-bottom: 76px; }
   .barra-nombre, .barra-hora { display: none; }
   .barra-nav { margin: 0 auto; gap: 16px; }
   body.interna .barra-nav { margin: 0 0 0 auto; gap: 12px; font-size: 12px; }
-  .titulo { bottom: 14vh; }
   .bloque { padding: 90px 16px 30px; }
   .track-head { grid-template-columns: 36px minmax(0, 1fr); }
   .track-nota { grid-column: 2; text-align: left; }
