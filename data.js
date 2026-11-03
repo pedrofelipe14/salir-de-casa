@@ -51,8 +51,6 @@ window.SDC = {
 
   // Ideas sueltas, como papelitos pegados.
   ideas: [
-    "un disco que suene a salir de casa por primera vez en mucho tiempo",
-    "glitches que parezcan recuerdos que se traban",
-    "el instrumento es parte del disco",
+    // "una idea suelta, en marcador",
   ],
 };

@@ -132,15 +132,6 @@ img { display: block; max-width: 100%; height: auto; }
 .titulo.glitch::after  { opacity: 1; clip-path: inset(62% 0 12% 0); transform: translateX(3%); }
 .titulo.glitch { color: transparent; -webkit-text-stroke: 1px var(--blanco); }
 
-.hero-marcador {
-  position: absolute;
-  top: 18vh;
-  right: 8vw;
-  margin: 0;
-  font-size: clamp(18px, 2.2vw, 28px);
-  transform: rotate(-8deg);
-  color: var(--tiza);
-}
 .hero-pie {
   position: absolute;
   left: 20px;
@@ -246,13 +237,11 @@ img { display: block; max-width: 100%; height: auto; }
 .pieza:nth-child(2n) .nota-marcador { transform: rotate(2deg); color: var(--tiza); }
 
 /* ---------- instrumento ---------- */
-.instrumento { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 40px; align-items: end; }
+.instrumento { max-width: 900px; }
 .captura { margin: 0; }
 .captura img { filter: grayscale(0.85) contrast(1.2); transition: filter 0.3s; }
 .captura:hover img { filter: none; }
 .captura figcaption { margin-top: 8px; }
-.instrumento-texto p { margin: 0 0 18px; font-size: 20px; line-height: 1.35; letter-spacing: -0.01em; }
-.instrumento-texto .marcador { color: var(--tiza); transform: rotate(-3deg); display: inline-block; }
 
 /* ---------- footer ---------- */
 .pie { display: flex; justify-content: space-between; padding: 100px 20px 22px; }
@@ -262,7 +251,6 @@ img { display: block; max-width: 100%; height: auto; }
   .barra { gap: 12px; padding: 12px 16px; }
   .barra-nombre, .barra-hora { display: none; }
   .barra-nav { margin: 0 auto; gap: 16px; }
-  .hero-marcador { top: 14vh; right: 6vw; }
   .titulo { bottom: 14vh; }
   .bloque { padding: 90px 16px 30px; }
   .track-head { grid-template-columns: 36px minmax(0, 1fr); }
