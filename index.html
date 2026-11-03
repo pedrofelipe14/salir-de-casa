@@ -8,72 +8,69 @@
   <link rel="icon" href="assets/banner.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@400;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,800;0,900;1,400&family=IBM+Plex+Mono:wght@400;500&family=Permanent+Marker&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
+  <div class="flash" id="flash" aria-hidden="true"></div>
 
-  <nav class="nav">
-    <a href="#demos">demos</a>
-    <a href="#diario">diario</a>
-    <a href="#tablero">fotos + ideas</a>
-    <a href="#instrumento">el instrumento</a>
-  </nav>
-
-  <header class="hero">
-    <div class="hero-text">
-      <p class="mono kicker">indietronica · micro tech · disco en proceso</p>
-      <h1 class="titulo">salir de casa</h1>
-      <p class="mano nota-hero">un disco que todavía no tiene nombre <span aria-hidden="true">&#8600;</span></p>
-      <div class="progreso">
-        <div class="progreso-linea"><span id="progreso-fill"></span></div>
-        <p class="mono"><span id="progreso"></span>% &nbsp;/&nbsp; <span id="estado"></span></p>
-      </div>
-    </div>
-
-    <figure class="polaroid logo-pin">
-      <span class="cinta-papel" aria-hidden="true"></span>
-      <img src="assets/banner.png" alt="Logo de salir de casa: las letras sdc hechas de puntos y una casita dibujada en tiza sobre pizarrón verde">
-      <figcaption class="mano">la casa, en tiza</figcaption>
-    </figure>
+  <header class="barra">
+    <a class="barra-nombre" href="#">salir de casa</a>
+    <nav class="barra-nav">
+      <a href="#demos">demos</a>
+      <a href="#diario">diario</a>
+      <a href="#archivo">archivo</a>
+      <a href="#instrumento">instrumento</a>
+    </nav>
+    <span class="barra-hora mono" id="hora">--:--</span>
   </header>
 
+  <section class="hero">
+    <canvas class="logo" id="logo" aria-label="Logo de salir de casa: sdc en puntos y una casita dibujada en tiza" role="img"></canvas>
+    <h1 class="titulo" data-text="salir de casa">salir de casa</h1>
+    <p class="marcador hero-marcador">indietronica / micro tech</p>
+    <div class="hero-pie mono">
+      <span>disco #1 — sin nombre</span>
+      <span><span id="progreso"></span>% — <span id="estado"></span></span>
+    </div>
+  </section>
+
   <main>
-    <section class="seccion" id="demos">
-      <h2 class="seccion-titulo">demos <em>y versiones</em></h2>
-      <p class="mano seccion-nota">de la primera idea a la versión final, todo queda acá</p>
-      <div class="cassettes" id="demos-list"></div>
+    <section class="bloque" id="demos">
+      <h2 class="bloque-titulo"><span class="num">01</span>demos</h2>
+      <ol class="tracks" id="demos-list"></ol>
     </section>
 
-    <section class="seccion" id="diario">
-      <h2 class="seccion-titulo">diario <em>del disco</em></h2>
-      <div class="cuaderno" id="diario-list"></div>
+    <section class="bloque" id="diario">
+      <h2 class="bloque-titulo"><span class="num">02</span>diario</h2>
+      <div class="diario" id="diario-list"></div>
     </section>
 
-    <section class="seccion" id="tablero">
-      <h2 class="seccion-titulo">fotos, arte <em>e ideas sueltas</em></h2>
-      <div class="tablero" id="tablero-list"></div>
+    <section class="bloque" id="archivo">
+      <h2 class="bloque-titulo"><span class="num">03</span>archivo</h2>
+      <p class="mono bloque-nota">fotos, arte, bocetos, ideas sueltas. se va llenando.</p>
+      <div class="archivo" id="archivo-list"></div>
     </section>
 
-    <section class="seccion instrumento" id="instrumento">
-      <figure class="polaroid ancha">
-        <span class="cinta-papel" aria-hidden="true"></span>
-        <img src="assets/plugin.png" alt="Captura del plugin Salir de Casa: perillas sobre un fondo verde pizarrón">
-        <figcaption class="mano">el instrumento</figcaption>
-      </figure>
-      <div class="instrumento-texto">
-        <h2 class="seccion-titulo">hecho <em>con su propio sinte</em></h2>
-        <p>El disco se está grabando con un instrumento hecho para él: <strong>Salir de Casa</strong>, un sintetizador con ondas que se dibujan moviendo puntos, un LFO y micro-loops que traban el sonido como un recuerdo que se repite.</p>
-        <p class="mano">cuando salga el disco, sale el plugin</p>
-        <p class="mono pequeño">vst3 · windows · en desarrollo</p>
+    <section class="bloque" id="instrumento">
+      <h2 class="bloque-titulo"><span class="num">04</span>instrumento</h2>
+      <div class="instrumento">
+        <figure class="captura">
+          <img src="assets/plugin.png" alt="Captura del plugin Salir de Casa">
+          <figcaption class="mono">salir_de_casa.vst3 — en desarrollo</figcaption>
+        </figure>
+        <div class="instrumento-texto">
+          <p>el disco se está haciendo con su propio sintetizador. ondas que se dibujan moviendo puntos, un lfo, y micro-loops que traban el sonido como un recuerdo que no termina de pasar.</p>
+          <p class="marcador">cuando salga el disco, sale el plugin</p>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer class="pie">
-    <p class="mano">gracias por pasar</p>
-    <p class="mono pequeño">salir de casa &copy; <span id="anio"></span> — esta página crece junto con el disco</p>
+  <footer class="pie mono">
+    <span>salir de casa © <span id="anio"></span></span>
+    <span>tocá la pantalla</span>
   </footer>
 
   <script src="data.js"></script>
