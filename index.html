@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>salir de casa</title>
-  <meta name="description" content="salir de casa. Diario de un disco en proceso: demos, versiones, arte, fotos e ideas.">
+  <meta name="description" content="salir de casa. Diario de un disco en proceso: demos, versiones, letras, visuales, fotos y el instrumento con el que se hace.">
   <link rel="icon" href="assets/banner.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,55 +18,39 @@
   <header class="barra">
     <a class="barra-nombre" href="#">salir de casa</a>
     <nav class="barra-nav">
-      <a href="#demos">demos</a>
+      <a href="#demos">temas</a>
       <a href="#diario">diario</a>
       <a href="#archivo">archivo</a>
-      <a href="#instrumento">instrumento</a>
+      <a href="#/instrumento">instrumento</a>
     </nav>
     <span class="barra-hora mono" id="hora">--:--</span>
   </header>
 
-  <section class="hero">
-    <canvas class="logo" id="logo" aria-label="Logo de salir de casa: sdc en puntos y una casita dibujada en tiza" role="img"></canvas>
-    <h1 class="titulo" data-text="salir de casa">salir de casa</h1>
-    <div class="hero-pie mono">
-      <span>disco #1 — sin nombre</span>
-      <span><span id="progreso"></span>% — <span id="estado"></span></span>
-    </div>
-  </section>
-
-  <main>
-    <section class="bloque" id="demos">
-      <h2 class="bloque-titulo"><span class="num">01</span>demos</h2>
-      <ol class="tracks" id="demos-list"></ol>
-    </section>
-
-    <section class="bloque" id="diario">
-      <h2 class="bloque-titulo"><span class="num">02</span>diario</h2>
-      <div class="diario" id="diario-list"></div>
-    </section>
-
-    <section class="bloque" id="archivo">
-      <h2 class="bloque-titulo"><span class="num">03</span>archivo</h2>
-      <p class="mono bloque-nota">fotos, arte, bocetos, ideas sueltas. se va llenando.</p>
-      <div class="archivo" id="archivo-list"></div>
-    </section>
-
-    <section class="bloque" id="instrumento">
-      <h2 class="bloque-titulo"><span class="num">04</span>instrumento</h2>
-      <div class="instrumento">
-        <figure class="captura">
-          <img src="assets/plugin.png" alt="Captura del plugin Salir de Casa">
-          <figcaption class="mono">salir_de_casa.vst3 — en desarrollo</figcaption>
-        </figure>
-      </div>
-    </section>
-  </main>
+  <!-- Each page (inicio, a song, the instrument) is drawn in here by script.js,
+       so the player below keeps playing while you move around. -->
+  <div id="vista"></div>
 
   <footer class="pie mono">
     <span>salir de casa © <span id="anio"></span></span>
-    <span>tocá la pantalla</span>
+    <span class="links" id="links-pie"></span>
   </footer>
+
+  <div class="player" id="player" hidden>
+    <button class="player-toggle" id="p-toggle" aria-label="pausar">pause</button>
+    <div class="player-info">
+      <a class="player-titulo" id="p-titulo" href="#"></a>
+      <span class="mono" id="p-version"></span>
+    </div>
+    <canvas class="player-osc" id="p-osc" width="320" height="48" aria-hidden="true"></canvas>
+    <div class="player-barra" id="p-barra" role="slider" aria-label="posición" tabindex="0"><span id="p-fill"></span></div>
+    <span class="mono player-tiempo" id="p-tiempo">0:00</span>
+    <button class="player-cerrar" id="p-cerrar" aria-label="cerrar reproductor">&times;</button>
+  </div>
+
+  <div class="lightbox" id="lightbox" hidden>
+    <img id="lb-img" alt="">
+    <p class="mono" id="lb-titulo"></p>
+  </div>
 
   <script src="data.js"></script>
   <script src="script.js"></script>
