@@ -252,62 +252,10 @@
     const later = (fn, ms) => timers.push(setTimeout(fn, ms));
 
     const hero = el("section", "hero");
-    const canvas = el("canvas", "logo");
-    canvas.setAttribute("role", "img");
-    canvas.setAttribute("aria-label", "Logo de salir de casa: sdc en puntos y una casita dibujada en tiza");
-    hero.appendChild(canvas);
     const titulo = el("h1", "titulo", "salir de casa");
     titulo.dataset.text = "salir de casa";
     hero.appendChild(titulo);
     root.appendChild(hero);
-
-    // Logo drawn to a canvas so it can tear like a bad signal.
-    const ctx = canvas.getContext("2d");
-    const logo = new Image();
-    logo.src = "assets/logo-tiza.png"; // just the chalk, so it sits right on the page's green
-    const drawClean = () => {
-      ctx.globalCompositeOperation = "source-over";
-      ctx.globalAlpha = 1;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(logo, 0, 0, canvas.width, canvas.height);
-    };
-    const drawTorn = (intensity) => {
-      drawClean();
-      const w = canvas.width;
-      const h = canvas.height;
-      const slices = 3 + Math.floor(Math.random() * 6 * intensity);
-      for (let i = 0; i < slices; i++) {
-        const y = Math.random() * h;
-        const sh = 4 + Math.random() * h * 0.12;
-        const dx = (Math.random() - 0.5) * w * 0.12 * intensity;
-        ctx.drawImage(canvas, 0, y, w, sh, dx, y, w, sh);
-      }
-      ctx.globalCompositeOperation = "screen";
-      ctx.globalAlpha = 0.35 * intensity;
-      ctx.drawImage(logo, 6 * intensity, 0, w, h);
-      ctx.globalAlpha = 1;
-      ctx.globalCompositeOperation = "source-over";
-    };
-    logo.onload = () => {
-      canvas.width = logo.naturalWidth;
-      canvas.height = logo.naturalHeight;
-      drawClean();
-      if (reduceMotion) return;
-      const burst = () => {
-        let frames = 3 + Math.floor(Math.random() * 6);
-        const step = () => {
-          if (frames-- > 0) {
-            drawTorn(0.4 + Math.random() * 0.8);
-            later(step, 50 + Math.random() * 60);
-          } else {
-            drawClean();
-            later(burst, 1500 + Math.random() * 3500);
-          }
-        };
-        step();
-      };
-      later(burst, 900);
-    };
 
     if (!reduceMotion) {
       const flicker = () => {

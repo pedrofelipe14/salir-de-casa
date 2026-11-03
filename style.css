@@ -107,17 +107,12 @@ body.inicio .pie { display: none; }
   padding: 80px 20px 60px;
   overflow: hidden;
 }
-.logo {
-  width: min(880px, 92vw);
-  height: auto;
-  aspect-ratio: 1018 / 309;
-}
 .titulo {
   position: relative;
   margin: 0;
   text-align: center;
   font-weight: 900;
-  font-size: clamp(52px, 13vw, 210px);
+  font-size: clamp(60px, 15vw, 250px);
   line-height: 0.8;
   letter-spacing: -0.055em;
   text-transform: lowercase;
