@@ -1,0 +1,190 @@
+/* ==========================================================================
+   salir de casa — versión simple
+   Va encima de style.css. Ambiente y espacio: negro, grises, una sola letra,
+   mucho aire y casi nada de color. Nada grita.
+   ========================================================================== */
+
+:root {
+  --negro: #050505;
+  --negro-2: #0d0d0d;
+  --blanco: #e6e6e3;
+  --gris: #7d7d7a;
+  --gris-oscuro: #1c1c1c;
+  --tiza: #b9b9b5;      /* el "color" ahora es apenas un gris más claro */
+  --rojo: #8a2a2a;
+  --pizarron: #050505;
+
+  --sans: "IBM Plex Mono", ui-monospace, monospace;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+body {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+  color: var(--blanco);
+  background: var(--negro);
+}
+::selection { background: var(--blanco); color: var(--negro); }
+
+/* el grano queda, pero como un ruido de fondo, no una tormenta */
+.grain { opacity: 0.06; animation-duration: 1.4s; }
+/* el flash de la cámara, mucho más tenue */
+.flash { background: radial-gradient(circle at var(--fx, 50%) var(--fy, 50%), rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 60%); }
+
+/* ---------- barra ---------- */
+.barra,
+body.interna .barra,
+body.inicio .barra {
+  mix-blend-mode: normal;
+  background: none;
+  padding: 28px 36px;
+  font-size: 13px;
+}
+body.interna .barra { background: linear-gradient(var(--negro) 60%, rgba(5, 5, 5, 0)); }
+.barra-nombre { font-weight: 400; letter-spacing: 0.3em; color: var(--gris); }
+.barra-nombre:hover { color: var(--blanco); }
+.barra-volver { border: 0; padding: 0; font-size: 13px; color: var(--gris); }
+.barra-volver:hover { background: none; color: var(--blanco); }
+.barra-nav { gap: 30px; }
+.barra-nav a { color: var(--gris); opacity: 1; letter-spacing: 0.1em; }
+.barra-nav a:hover,
+.barra-nav a.activo { color: var(--blanco); text-decoration: none; }
+.barra-hora { color: var(--gris); font-size: 13px; }
+.barra-hora::before { color: var(--rojo); }
+
+/* ---------- inicio: el nombre y el piano, flotando en el vacío ---------- */
+body.inicio { background: var(--negro); }
+.hero { gap: 9vh; padding: 120px 24px 80px; }
+.titulo {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: clamp(16px, 2.2vw, 26px);
+  line-height: 1;
+  letter-spacing: 0.6em;
+  transform: none;
+  color: var(--blanco);
+  padding-left: 0.6em; /* compensa el espacio de la última letra para que quede centrado */
+}
+.titulo.glitch { color: transparent; -webkit-text-stroke: 0.5px var(--gris); }
+.titulo.glitch::before { color: var(--gris); }
+.titulo.glitch::after { color: var(--blanco); }
+
+.piano-wrap { width: min(560px, 86vw); }
+.piano { height: clamp(90px, 14vw, 130px); }
+.tecla.blanca {
+  margin-left: -1px;
+  border: 1px solid rgba(230, 230, 227, 0.28);
+  border-radius: 0;
+  background: transparent;
+}
+.tecla.negra {
+  border: 1px solid rgba(230, 230, 227, 0.28);
+  border-radius: 0;
+  background: var(--negro);
+}
+.tecla.blanca:hover { background: rgba(230, 230, 227, 0.05); }
+.tecla.negra:hover { background: #151515; }
+.tecla.blanca.on { background: rgba(230, 230, 227, 0.85); }
+.tecla.negra.on { background: rgba(230, 230, 227, 0.6); }
+.tecla.guia { background: rgba(230, 230, 227, 0.4) !important; box-shadow: 0 0 30px rgba(230, 230, 227, 0.15); }
+.piano-pie { justify-content: center; margin-top: 28px; }
+.piano-jugar { margin-left: 0; }
+.piano-estado { color: var(--gris); min-width: 0; }
+
+/* ---------- botones ---------- */
+.play,
+.boton {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  background: none;
+  color: var(--gris);
+  border: 1px solid #2a2a2a;
+  padding: 6px 16px;
+}
+.play:hover, .play.on,
+a.boton:hover { background: none; color: var(--blanco); border-color: var(--gris); }
+.boton.apagado { color: #4a4a48; border-color: #1c1c1c; }
+
+/* ---------- páginas internas: una columna angosta con mucho aire ---------- */
+.pagina,
+.bloque { max-width: 720px; padding: 22vh 24px 10vh; }
+.pagina-head { margin-bottom: 12vh; }
+.pagina-titulo,
+.bloque-titulo {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: clamp(18px, 2.4vw, 26px);
+  line-height: 1.2;
+  letter-spacing: 0.5em;
+  transform: none;
+  margin: 0 0 24px;
+  color: var(--blanco);
+}
+.pagina-titulo:hover::before,
+.pagina-titulo:hover::after { display: none; }
+
+.pagina-seccion { border-top: 0; padding: 0 0 10vh; }
+.sub-titulo {
+  font-family: var(--mono);
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.4em;
+  line-height: 1.4;
+  color: var(--gris);
+  margin-bottom: 28px;
+}
+
+/* temas: una lista que respira */
+.tracks { border-top: 0; }
+.track { border-bottom: 0; }
+.track-head { padding: 14px 0; }
+.track-titulo { font-family: var(--mono); font-weight: 400; font-size: 18px; letter-spacing: 0.15em; line-height: 1.4; color: var(--gris); transition: color 0.4s; }
+.track:hover .track-titulo { color: var(--blanco); }
+.versiones { padding: 0 0 16px; }
+
+/* diario: entradas sueltas, sin cajas */
+.diario { background: none; border: 0; gap: 9vh; max-width: none; }
+.entrada { background: none; padding: 0; }
+.entrada h3 { font-family: var(--mono); font-weight: 400; font-size: 16px; letter-spacing: 0.2em; margin-bottom: 14px; }
+.entrada p { color: var(--gris); font-size: 15px; line-height: 1.9; }
+
+/* archivo: fotos en blanco y negro, ordenadas, con aire entre ellas */
+.archivo { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9vh 40px; }
+.archivo .pieza:nth-child(n) { grid-column: span 1; margin-top: 0; }
+.foto img { filter: grayscale(1) contrast(0.95) brightness(0.85); transition: filter 1.2s; }
+.foto:hover img { filter: grayscale(1) contrast(1.05) brightness(1); }
+.foto.vacia,
+.archivo .pieza:nth-child(n) .foto.vacia {
+  aspect-ratio: 4 / 5;
+  background: radial-gradient(circle at 50% 46%, rgba(255, 255, 255, 0.06) 0%, transparent 55%), var(--negro-2);
+}
+.nota-marcador { font-family: var(--mono); font-size: 15px; transform: none !important; color: var(--gris) !important; }
+
+/* instrumento */
+.captura img { filter: grayscale(1) brightness(0.8); transition: filter 1.2s; }
+.captura:hover img { filter: grayscale(0.6) brightness(0.95); }
+.funciones li { border-bottom: 0; font-size: 15px; color: var(--gris); padding: 8px 0; }
+.letra { font-family: var(--mono); font-size: 16px; line-height: 2; color: var(--gris); }
+
+.pagina-nav { border-top: 0; font-family: var(--mono); font-weight: 400; font-size: 14px; letter-spacing: 0.2em; color: var(--gris); }
+.pagina-nav a:hover { color: var(--blanco); }
+
+/* ---------- reproductor ---------- */
+.player { background: rgba(5, 5, 5, 0.94); border-top: 1px solid var(--gris-oscuro); backdrop-filter: none; }
+.player-toggle { font-family: var(--mono); background: none; color: var(--blanco); border: 1px solid #2a2a2a; }
+.player-titulo { font-weight: 400; letter-spacing: 0.1em; }
+.player-barra::before { height: 1px; background: #262626; }
+.player-barra span { height: 1px; background: var(--blanco); }
+
+@media (max-width: 760px) {
+  .barra { padding: 20px 20px; }
+  .barra-nav { gap: 14px; margin: 0 auto; }
+  .barra-nav a { letter-spacing: 0.04em; font-size: 12px; }
+  .pagina, .bloque { padding: 16vh 20px 10vh; }
+  .archivo { grid-template-columns: minmax(0, 1fr); }
+  .titulo { letter-spacing: 0.4em; padding-left: 0.4em; }
+}
