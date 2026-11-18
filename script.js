@@ -248,7 +248,7 @@
 
   // ---------- page: inicio ----------
   // El nombre gigante, que aparece letra por letra saliendo de la oscuridad,
-  // con un cielo de polvo de estrellas detrás que se mueve muy lento.
+  // sobre una textura sucia de escaneo, como una fotocopia vieja.
   const vistaInicio = (root) => {
     const hero = el("section", "hero");
 
@@ -275,58 +275,100 @@
     hero.appendChild(titulo);
     root.appendChild(hero);
 
-    // Polvo de estrellas: puntitos que derivan despacio, a distintas profundidades.
+    // Textura de escaneo / fotocopia: se dibuja una vez (y de nuevo si cambia el tamaño).
+    // Tóner desparejo, grano, polvo, pelitos, rayas del escáner y bordes quemados.
     const ctx = cielo.getContext("2d");
-    let W = 0, H = 0, raf = 0, mx = 0, my = 0, tx = 0, ty = 0;
-    const estrellas = [];
-    const medir = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = hero.clientWidth; H = hero.clientHeight;
-      cielo.width = W * dpr; cielo.height = H * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const cuantas = Math.round((W * H) / 5200);
-      estrellas.length = 0;
-      for (let i = 0; i < cuantas; i++) {
-        const z = Math.random();
-        estrellas.push({
-          x: Math.random() * W, y: Math.random() * H, z,
-          r: 0.3 + z * 1.2,
-          v: 0.02 + z * 0.12,
-          f: Math.random() * Math.PI * 2,
-        });
+    const azar = (min, max) => min + Math.random() * (max - min);
+    const textura = () => {
+      const W = hero.clientWidth, H = hero.clientHeight;
+      cielo.width = W; cielo.height = H;
+
+      // 1) tóner desparejo: manchas grandes y suaves (ruido chico estirado)
+      const chico = document.createElement("canvas");
+      chico.width = Math.ceil(W / 40); chico.height = Math.ceil(H / 40);
+      const cc = chico.getContext("2d");
+      const manchas = cc.createImageData(chico.width, chico.height);
+      for (let i = 0; i < manchas.data.length; i += 4) {
+        const v = 8 + Math.random() * 22;
+        manchas.data[i] = manchas.data[i + 1] = manchas.data[i + 2] = v;
+        manchas.data[i + 3] = 255;
       }
-    };
-    const dibujar = (t) => {
-      ctx.clearRect(0, 0, W, H);
-      tx += (mx - tx) * 0.03; ty += (my - ty) * 0.03;
-      for (const e of estrellas) {
-        if (!reduceMotion) { e.y -= e.v; e.x += e.v * 0.25; }
-        if (e.y < -4) { e.y = H + 4; e.x = Math.random() * W; }
-        if (e.x > W + 4) e.x = -4;
-        const brillo = 0.25 + 0.55 * e.z * (0.6 + 0.4 * Math.sin(t / 1400 + e.f));
-        const px = e.x + tx * e.z * 18, py = e.y + ty * e.z * 18;
-        ctx.globalAlpha = brillo;
-        ctx.fillStyle = "#e6e6e3";
+      cc.putImageData(manchas, 0, 0);
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(chico, 0, 0, W, H);
+
+      // 2) grano fino de fotocopia
+      const img = ctx.getImageData(0, 0, W, H);
+      const d = img.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const n = (Math.random() - 0.5) * 34 + (Math.random() < 0.004 ? azar(40, 120) : 0);
+        d[i] += n; d[i + 1] += n; d[i + 2] += n;
+      }
+      ctx.putImageData(img, 0, 0);
+
+      // 3) bandas horizontales del escáner
+      for (let y = 0; y < H; y += azar(3, 40)) {
+        ctx.fillStyle = "rgba(255,255,255," + azar(0, 0.025).toFixed(3) + ")";
+        ctx.fillRect(0, y, W, azar(1, 6));
+      }
+      // 4) rayas verticales largas (vidrio del escáner sucio)
+      for (let i = 0; i < Math.round(W / 140); i++) {
+        const x = azar(0, W);
+        ctx.fillStyle = "rgba(230,230,225," + azar(0.03, 0.12).toFixed(3) + ")";
+        ctx.fillRect(x, azar(-H * 0.2, H * 0.3), azar(0.5, 1.6), azar(H * 0.4, H * 1.2));
+      }
+      // 5) polvo: puntitos y grumos claros
+      for (let i = 0; i < (W * H) / 2600; i++) {
+        ctx.fillStyle = "rgba(235,235,230," + azar(0.15, 0.7).toFixed(2) + ")";
         ctx.beginPath();
-        ctx.arc(px, py, e.r, 0, Math.PI * 2);
+        ctx.ellipse(azar(0, W), azar(0, H), azar(0.4, 2.2), azar(0.4, 1.6), azar(0, 3.14), 0, Math.PI * 2);
         ctx.fill();
       }
-      ctx.globalAlpha = 1;
-      if (!reduceMotion) raf = requestAnimationFrame(dibujar);
+      // 6) pelitos y fibras
+      ctx.lineCap = "round";
+      for (let i = 0; i < Math.round((W * H) / 90000); i++) {
+        const x = azar(0, W), y = azar(0, H), l = azar(20, 120);
+        ctx.strokeStyle = "rgba(230,230,225," + azar(0.12, 0.4).toFixed(2) + ")";
+        ctx.lineWidth = azar(0.4, 1.1);
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.bezierCurveTo(x + azar(-l, l), y + azar(-l, l), x + azar(-l, l), y + azar(-l, l), x + azar(-l, l), y + azar(-l, l));
+        ctx.stroke();
+      }
+      // 7) manchas negras de tóner
+      for (let i = 0; i < Math.round((W * H) / 60000); i++) {
+        ctx.fillStyle = "rgba(0,0,0," + azar(0.3, 0.7).toFixed(2) + ")";
+        ctx.beginPath();
+        ctx.arc(azar(0, W), azar(0, H), azar(1, 7), 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // 8) bordes quemados y una franja de luz donde no cerró la tapa del escáner
+      const vin = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.25, W / 2, H / 2, Math.max(W, H) * 0.75);
+      vin.addColorStop(0, "rgba(0,0,0,0)");
+      vin.addColorStop(1, "rgba(0,0,0,0.75)");
+      ctx.fillStyle = vin;
+      ctx.fillRect(0, 0, W, H);
+      const borde = ctx.createLinearGradient(W, 0, W - W * 0.08, 0);
+      borde.addColorStop(0, "rgba(220,220,215,0.22)");
+      borde.addColorStop(1, "rgba(220,220,215,0)");
+      ctx.fillStyle = borde;
+      ctx.fillRect(W - W * 0.08, 0, W * 0.08, H);
     };
     const mover = (e) => {
-      mx = (e.clientX / window.innerWidth - 0.5) * 2;
-      my = (e.clientY / window.innerHeight - 0.5) * 2;
-      if (!reduceMotion) titulo.style.transform = "translate(" + (-mx * 8).toFixed(1) + "px," + (-my * 6).toFixed(1) + "px)";
+      if (reduceMotion) return;
+      const mx = (e.clientX / window.innerWidth - 0.5) * 2;
+      const my = (e.clientY / window.innerHeight - 0.5) * 2;
+      titulo.style.transform = "translate(" + (-mx * 6).toFixed(1) + "px," + (-my * 4).toFixed(1) + "px)";
     };
-    medir();
-    raf = requestAnimationFrame(dibujar);
-    window.addEventListener("resize", medir);
+    let espera = 0;
+    const alCambiar = () => { clearTimeout(espera); espera = setTimeout(textura, 150); };
+    textura();
+    window.addEventListener("resize", alCambiar);
     window.addEventListener("pointermove", mover, { passive: true });
 
     return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("resize", medir);
+      clearTimeout(espera);
+      window.removeEventListener("resize", alCambiar);
       window.removeEventListener("pointermove", mover);
     };
   };

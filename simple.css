@@ -253,3 +253,20 @@ a.boton:hover { background: none; color: var(--blanco); border-color: var(--gris
 @media (max-width: 760px) {
   .titulo { font-size: clamp(48px, 17vw, 110px); line-height: 1; }
 }
+
+/* ---------- portada grunge: letra gorda, apretada, fotocopiada ---------- */
+.titulo {
+  font-family: "Inter Tight", sans-serif;
+  font-weight: 900;
+  font-size: clamp(60px, 13.5vw, 230px);
+  line-height: 0.78;
+  letter-spacing: -0.065em;
+  padding-left: 0;
+  color: #e9e7e1;
+  filter: url(#fotocopia) contrast(1.15);
+}
+.letra-t { animation-name: aparece; animation-iteration-count: 1; }
+.titulo::after { mix-blend-mode: overlay; }
+@media (max-width: 760px) {
+  .titulo { font-size: clamp(64px, 24vw, 140px); line-height: 0.8; }
+}
