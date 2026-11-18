@@ -500,3 +500,30 @@ body.con-player { padding-bottom: 76px; }
 @media (hover: none) {
   .tecla-letra, .piano-ayuda { display: none; }
 }
+
+/* ---------- sin textos chiquitos ----------
+   Se esconden las etiquetas de adorno (números, subtítulos, epígrafes,
+   nombres de archivo, pie, letras del piano). Quedan la navegación y los botones. */
+.num,
+.track-num,
+.track-nota,
+.track-flecha,
+.pagina-head > p.mono,
+.inst-meta > .mono,
+.foto-etiqueta,
+figcaption,
+.pagina > .volver,
+.pie,
+.piano-ayuda,
+.piano-octava,
+.tecla-letra,
+.tecla-nombre { display: none !important; }
+/* sin la columna del número, el título ocupa todo el ancho */
+.track-head,
+.funciones li { grid-template-columns: minmax(0, 1fr) !important; }
+/* secciones que todavía no tienen nada (solo el "pronto_"): no se muestran */
+.pagina-seccion:has(> .pronto) { display: none; }
+/* fechas chiquitas del diario y de las versiones */
+.entrada-fecha,
+.version-fecha { display: none !important; }
+.entrada { grid-template-columns: minmax(0, 1fr) !important; }
