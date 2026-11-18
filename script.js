@@ -247,38 +247,87 @@
   };
 
   // ---------- page: inicio ----------
+  // El nombre gigante, que aparece letra por letra saliendo de la oscuridad,
+  // con un cielo de polvo de estrellas detrás que se mueve muy lento.
   const vistaInicio = (root) => {
-    const timers = [];
-    const later = (fn, ms) => timers.push(setTimeout(fn, ms));
-
     const hero = el("section", "hero");
-    const titulo = el("h1", "titulo", "salir de casa");
-    titulo.dataset.text = "salir de casa";
+
+    const cielo = document.createElement("canvas");
+    cielo.className = "cielo";
+    cielo.setAttribute("aria-hidden", "true");
+    hero.appendChild(cielo);
+
+    const titulo = el("h1", "titulo");
+    titulo.setAttribute("aria-label", "salir de casa");
+    let n = 0;
+    "salir de casa".split(" ").forEach((palabra, p) => {
+      if (p > 0) titulo.appendChild(document.createTextNode(" "));
+      const pal = el("span", "palabra");
+      pal.setAttribute("aria-hidden", "true");
+      for (const c of palabra) {
+        const letra = el("span", "letra-t", c);
+        letra.style.setProperty("--d", (0.35 + n * 0.13).toFixed(2) + "s");
+        n++;
+        pal.appendChild(letra);
+      }
+      titulo.appendChild(pal);
+    });
     hero.appendChild(titulo);
     root.appendChild(hero);
 
-    // Every note you play kicks the title's glitch.
-    let glitchTimer = 0;
-    const glitch = (ms) => {
-      if (reduceMotion) return;
-      titulo.classList.add("glitch");
-      clearTimeout(glitchTimer);
-      glitchTimer = setTimeout(() => titulo.classList.remove("glitch"), ms);
+    // Polvo de estrellas: puntitos que derivan despacio, a distintas profundidades.
+    const ctx = cielo.getContext("2d");
+    let W = 0, H = 0, raf = 0, mx = 0, my = 0, tx = 0, ty = 0;
+    const estrellas = [];
+    const medir = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = hero.clientWidth; H = hero.clientHeight;
+      cielo.width = W * dpr; cielo.height = H * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const cuantas = Math.round((W * H) / 5200);
+      estrellas.length = 0;
+      for (let i = 0; i < cuantas; i++) {
+        const z = Math.random();
+        estrellas.push({
+          x: Math.random() * W, y: Math.random() * H, z,
+          r: 0.3 + z * 1.2,
+          v: 0.02 + z * 0.12,
+          f: Math.random() * Math.PI * 2,
+        });
+      }
     };
-    const desmontarPiano = window.SDCPiano.montar(hero, { onNote: () => glitch(70 + Math.random() * 60) });
-
-    if (!reduceMotion) {
-      const flicker = () => {
-        glitch(90 + Math.random() * 120);
-        later(flicker, 2200 + Math.random() * 4000);
-      };
-      later(flicker, 1600);
-    }
+    const dibujar = (t) => {
+      ctx.clearRect(0, 0, W, H);
+      tx += (mx - tx) * 0.03; ty += (my - ty) * 0.03;
+      for (const e of estrellas) {
+        if (!reduceMotion) { e.y -= e.v; e.x += e.v * 0.25; }
+        if (e.y < -4) { e.y = H + 4; e.x = Math.random() * W; }
+        if (e.x > W + 4) e.x = -4;
+        const brillo = 0.25 + 0.55 * e.z * (0.6 + 0.4 * Math.sin(t / 1400 + e.f));
+        const px = e.x + tx * e.z * 18, py = e.y + ty * e.z * 18;
+        ctx.globalAlpha = brillo;
+        ctx.fillStyle = "#e6e6e3";
+        ctx.beginPath();
+        ctx.arc(px, py, e.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      if (!reduceMotion) raf = requestAnimationFrame(dibujar);
+    };
+    const mover = (e) => {
+      mx = (e.clientX / window.innerWidth - 0.5) * 2;
+      my = (e.clientY / window.innerHeight - 0.5) * 2;
+      if (!reduceMotion) titulo.style.transform = "translate(" + (-mx * 8).toFixed(1) + "px," + (-my * 6).toFixed(1) + "px)";
+    };
+    medir();
+    raf = requestAnimationFrame(dibujar);
+    window.addEventListener("resize", medir);
+    window.addEventListener("pointermove", mover, { passive: true });
 
     return () => {
-      timers.forEach(clearTimeout);
-      clearTimeout(glitchTimer);
-      desmontarPiano();
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", medir);
+      window.removeEventListener("pointermove", mover);
     };
   };
 
