@@ -289,3 +289,7 @@ a.boton:hover { background: none; color: var(--blanco); border-color: var(--gris
 @keyframes aparece-cuenta { to { opacity: 0.85; } }
 @media (prefers-reduced-motion: reduce) { .cuenta { opacity: 0.85; } }
 @media (max-width: 760px) { .cuenta { filter: none; font-size: 20px; letter-spacing: 0.12em; } }
+
+/* el nombre está ahí desde el principio, sin aparecer de a poco */
+.letra-t { animation: none !important; opacity: 1; filter: none; transform: none; }
+.cuenta { animation: aparece-cuenta 0.6s ease-out forwards; }
