@@ -273,6 +273,21 @@
       titulo.appendChild(pal);
     });
     hero.appendChild(titulo);
+
+    // Cuenta regresiva hasta el 18 de febrero de 2027, 00:00 en Argentina.
+    const FECHA = new Date("2027-02-18T00:00:00-03:00").getTime();
+    const cuenta = el("p", "cuenta");
+    cuenta.setAttribute("aria-label", "cuenta regresiva");
+    hero.appendChild(cuenta);
+    const dos = (n) => String(n).padStart(2, "0");
+    const tic = () => {
+      const falta = Math.max(0, FECHA - Date.now());
+      const seg = Math.floor(falta / 1000);
+      const d = Math.floor(seg / 86400), h = Math.floor(seg / 3600) % 24, m = Math.floor(seg / 60) % 60, x = seg % 60;
+      cuenta.textContent = d + "d " + dos(h) + "h " + dos(m) + "m " + dos(x) + "s";
+    };
+    tic();
+    const reloj = setInterval(tic, 1000);
     root.appendChild(hero);
 
     // Textura de escaneo / fotocopia: se dibuja una vez (y de nuevo si cambia el tamaño).
@@ -367,6 +382,7 @@
     window.addEventListener("pointermove", mover, { passive: true });
 
     return () => {
+      clearInterval(reloj);
       clearTimeout(espera);
       window.removeEventListener("resize", alCambiar);
       window.removeEventListener("pointermove", mover);

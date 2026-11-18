@@ -270,3 +270,22 @@ a.boton:hover { background: none; color: var(--blanco); border-color: var(--gris
 @media (max-width: 760px) {
   .titulo { font-size: clamp(64px, 24vw, 140px); line-height: 0.8; }
 }
+
+/* ---------- cuenta regresiva debajo del nombre ---------- */
+.cuenta {
+  position: relative;
+  z-index: 1;
+  margin: 5vh 0 0;
+  font-family: var(--mono);
+  font-weight: 500;
+  font-size: clamp(18px, 2.2vw, 30px);
+  letter-spacing: 0.18em;
+  color: #e9e7e1;
+  font-variant-numeric: tabular-nums;
+  filter: url(#fotocopia);
+  opacity: 0;
+  animation: aparece-cuenta 2s ease-out 2.4s forwards;
+}
+@keyframes aparece-cuenta { to { opacity: 0.85; } }
+@media (prefers-reduced-motion: reduce) { .cuenta { opacity: 0.85; } }
+@media (max-width: 760px) { .cuenta { filter: none; font-size: 20px; letter-spacing: 0.12em; } }
