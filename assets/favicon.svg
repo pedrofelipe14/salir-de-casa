@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <filter id="f"><feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="1" seed="3" result="r"/><feDisplacementMap in="SourceGraphic" in2="r" scale="1.6" xChannelSelector="R" yChannelSelector="G"/></filter>
+  <rect width="64" height="64" fill="#0b0b0a"/>
+  <text x="32" y="43" text-anchor="middle" font-family="'Arial Black','Helvetica Neue',Arial,sans-serif" font-weight="900" font-size="30" letter-spacing="-2.4" fill="#e9e7e1" filter="url(#f)">sdc</text>
+</svg>
